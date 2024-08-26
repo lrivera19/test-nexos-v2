@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Gestión Departamentos</title>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+    <h:body>
+
+        <div class="container">
+
+            <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" 
+                        styleClass="p-message p-message-info" />
+            <p:messages id="messagesError" showDetail="true" autoUpdate="true" closable="true" 
+                        styleClass="p-message p-message-error" />
+
+            <h:form id="departmentForm">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="code" value="Código:"  />
+                    <h:inputText id="code"  value="#{departmentController.department.departmentCode}" required="true" />
+
+                    <h:outputLabel for="description" value="Nombre:" />
+                    <h:inputText id="description" value="#{departmentController.department.departmentName}" required="true" />
+
+                    <p:commandButton value="Guardar" 
+                                     action="#{departmentController.createOrUpdate}" 
+                                     update="departmentForm departmentListForm messages"
+                                     resetInput="true" 
+                                     process="@form" 
+                                     styleClass="button" />
+                </h:panelGrid>
+            </h:form>
+
+            <h:form id="departmentListForm">
+                <!-- Tabla para mostrar la lista de departamentos -->
+                <p:dataTable value="#{departmentController.departments}" var="dept" editable="true" 
+                             styleClass="table">
+                    <p:column headerText="Código">
+                        <h:outputText value="#{dept.departmentCode}" />
+                    </p:column>
+
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{dept.departmentName}" />
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <!-- Botón para editar -->
+                        <p:commandButton value="Editar" 
+                                         action="#{departmentController.setDepartment(dept)}" 
+                                         update=":departmentForm" 
+                                         styleClass="button" />
+                        <!-- Botón para eliminar -->
+                        <p:commandButton value="Eliminar" 
+                                         action="#{departmentController.delete(dept)}" 
+                                         update="departmentForm departmentListForm messages" 
+                                         resetInput="true" 
+                                         process="@this" 
+                                         styleClass="button" />
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+            <h:form id="backButtonForm">
+                <p:commandButton value="Volver al Menú" action="index.xhtml" 
+                                 immediate="true" 
+                                 styleClass="button button-back" />
+            </h:form>
+        </div>
+
+    </h:body>
+</html>
